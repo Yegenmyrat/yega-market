@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="tk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ff9900">
+<title>Yega Market — Hemme zat bir ýerde</title>
+<style>
+:root{--orange:#ff9900;--navy:#172337;--ink:#182230;--muted:#687386;--line:#e7eaf0;--bg:#f5f6f8}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:inherit;text-decoration:none}button,input,select{font:inherit}
+.top{background:#131f2e;color:#fff;padding:9px 4%;font-size:12px;display:flex;justify-content:space-between;gap:12px}
+.header{background:#202f42;color:#fff;padding:14px 4%;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:9px;min-width:175px}.mark{font-weight:900;font-size:27px;color:#ffb12b;letter-spacing:-3px;border:2px solid #ffb12b;padding:2px 7px;border-radius:7px}.brandname{font-weight:800;font-size:19px;line-height:1.05}.brandname small{display:block;font-size:10px;color:#ffbd4a;letter-spacing:2px;margin-top:4px}
+.search{display:flex;flex:1;max-width:760px}.search input{width:100%;border:0;padding:13px 14px;border-radius:7px 0 0 7px;outline:none}.search button{border:0;background:var(--orange);padding:0 18px;border-radius:0 7px 7px 0;font-weight:bold;cursor:pointer}
+.head-actions{display:flex;gap:15px;align-items:center;font-size:13px;white-space:nowrap}.cartbtn{background:#33445b;border:1px solid #66758a;color:white;border-radius:7px;padding:10px 12px;cursor:pointer}
+.nav{background:#31445c;color:white;padding:10px 4%;display:flex;gap:22px;overflow:auto;font-size:13px;white-space:nowrap}
+main{max-width:1200px;margin:auto;padding:18px 16px}.hero{border-radius:14px;min-height:245px;padding:35px 5%;display:flex;align-items:center;justify-content:space-between;gap:20px;background:linear-gradient(115deg,#172337,#284e70 65%,#ff9900);color:#fff;overflow:hidden}
+.hero h1{font-size:clamp(27px,5vw,46px);margin:0 0 12px;max-width:560px}.hero p{color:#e4edf8;max-width:470px;line-height:1.5}.hero .cta{background:#ffb12b;color:#182230;padding:12px 19px;border:0;border-radius:7px;font-weight:bold;cursor:pointer}.hero-art{font-size:105px;filter:drop-shadow(0 10px 15px #0005)}
+.perks{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}.perk{background:white;border:1px solid var(--line);border-radius:10px;padding:15px;font-size:13px}.perk b{display:block;margin-bottom:5px}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;margin:26px 0 13px}.sectionhead h2{font-size:22px;margin:0}.muted{color:var(--muted);font-size:13px}
+.categories{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}.cat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 8px;text-align:center;cursor:pointer}.cat .emoji{font-size:30px;display:block;margin-bottom:8px}.cat b{font-size:13px}
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.product{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}.photo{height:155px;display:grid;place-items:center;font-size:58px;background:linear-gradient(135deg,#f4f6fa,#e9eef5)}.pbody{padding:13px;display:flex;flex-direction:column;flex:1}.pbody h3{font-size:14px;margin:0 0 8px;min-height:34px}.price{font-size:18px;font-weight:800;color:#b45309;margin:4px 0 10px}.tag{font-size:11px;color:#687386}.add{margin-top:auto;background:#ffd36e;border:0;border-radius:20px;padding:10px;cursor:pointer;font-weight:bold}.add:hover,.cta:hover{filter:brightness(.96)}
+footer{background:#172337;color:#d8e0ea;margin-top:35px;padding:30px 5%;text-align:center;font-size:13px}.footbrand{font-size:20px;font-weight:bold;color:white;margin-bottom:7px}
+.drawer{position:fixed;inset:0;background:#0007;display:none;z-index:10;justify-content:flex-end}.drawer.open{display:flex}.panel{background:white;width:min(430px,100%);height:100%;padding:20px;overflow:auto}.panelhead{display:flex;justify-content:space-between;align-items:center}.close{border:0;background:#edf0f4;border-radius:50%;width:35px;height:35px;cursor:pointer}.cartline{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:13px 0;gap:12px}.cartline button{border:0;background:#fee2e2;color:#991b1b;border-radius:6px;padding:5px 8px}.total{font-size:20px;font-weight:bold;text-align:right;margin:18px 0}.checkout{display:grid;gap:10px}.checkout input,.checkout textarea{padding:12px;border:1px solid #ccd3dd;border-radius:7px;width:100%}.checkout button{padding:13px;border:0;background:#172337;color:white;border-radius:7px;font-weight:bold;cursor:pointer}.notice{background:#fff7e6;border:1px solid #ffe0a3;border-radius:9px;padding:12px;font-size:12px;color:#704b0b;line-height:1.5;margin-top:12px}
+@media(max-width:760px){.header{flex-wrap:wrap;gap:10px}.brand{min-width:0}.head-actions{margin-left:auto}.search{order:3;flex-basis:100%;max-width:none}.nav{gap:16px}.hero{min-height:220px}.hero-art{font-size:65px}.perks{grid-template-columns:repeat(2,1fr)}.categories{grid-template-columns:repeat(3,1fr)}.products{grid-template-columns:repeat(2,1fr)}.photo{height:125px}}
+@media(max-width:360px){.brandname{font-size:16px}.head-actions{font-size:11px}.products{gap:8px}.pbody{padding:10px}}
+</style>
+</head>
+<body>
+<div class="top"><span>🌍 Dünýä boýunça söwda üçin Yega Market</span><span>Türkmençe · Mugt başlangyç nusga</span></div>
+<header class="header">
+  <a class="brand" href="#"><span class="mark">|Y|</span><span class="brandname">YEGA MARKET<small>SHOP THE WORLD</small></span></a>
+  <form class="search" id="searchForm"><input id="searchInput" placeholder="Haryt gözle..." aria-label="Haryt gözle"><button>Gözle</button></form>
+  <div class="head-actions"><span>Harytlar</span><button class="cartbtn" id="openCart">🛒 Sebet (<span id="cartCount">0</span>)</button></div>
+</header>
+<nav class="nav"><a href="#categories">Kategoriýalar</a><a href="#products">Meşhur harytlar</a><a href="#about">Biz barada</a><a href="#contact">Habarlaşmak</a></nav>
+<main>
+<section class="hero">
+ <div><h1>Gözle, saýla, Yega Market-den tap!</h1><p>Geýim, elektronika, öý goşlary we gündelik zerur zatlar — hemmesi bir ýerde.</p><button class="cta" onclick="document.querySelector('#products').scrollIntoView({behavior:'smooth'})">Harytlary gör</button></div>
+ <div class="hero-art">🛍️</div>
+</section>
+<section class="perks">
+ <div class="perk"><b>🌍 Dünýä bazary</b><span class="muted">Giň haryt saýlawy üçin niýetlenen.</span></div>
+ <div class="perk"><b>🔎 Ýeňil gözleg</b><span class="muted">Gerek harydyňy çalt tap.</span></div>
+ <div class="perk"><b>🛒 Sebet</b><span class="muted">Saýlan harytlaryňy bir ýere jemle.</span></div>
+ <div class="perk"><b>📱 Telefon üçin</b><span class="muted">Android ekranyna laýyk dizaýn.</span></div>
+</section>
+<div class="sectionhead" id="categories"><h2>Kategoriýalar</h2><span class="muted">Birini saýla</span></div>
+<section class="categories">
+ <button class="cat" data-cat="Geýim"><span class="emoji">👕</span><b>Geýim</b></button>
+ <button class="cat" data-cat="Elektronika"><span class="emoji">📱</span><b>Elektronika</b></button>
+ <button class="cat" data-cat="Öý goşlary"><span class="emoji">🏠</span><b>Öý goşlary</b></button>
+ <button class="cat" data-cat="Gözellik"><span class="emoji">💄</span><b>Gözellik</b></button>
+ <button class="cat" data-cat="Sport"><span class="emoji">⚽</span><b>Sport</b></button>
+ <button class="cat" data-cat="Aksessuarlary"><span class="emoji">⌚</span><b>Aksessuarlar</b></button>
+</section>
+<div class="sectionhead" id="products"><h2>Harytlar</h2><span class="muted" id="productHint">Synag üçin nusga harytlar</span></div>
+<section class="products" id="productGrid"></section>
+<section id="about" class="notice"><b>Möhüm:</b> Bu Yega Market-iň mugt başlangyç web nusgasydyr. Görkezilen harytlar we bahalar diňe dizaýn synagy üçin; hakyky satuw, töleg ýa-da iberiş hyzmaty birikdirilen däldir.</section>
+</main>
+<footer id="contact"><div class="footbrand"><span style="color:#ffb12b">|Y|</span> YEGA MARKET</div><p>Hemme zat bir ýerde.</p><p>Habarlaşmak üçin: soňra öz e-poçtaňy ýa-da WhatsApp belgiňi goş.</p><small>© <span id="year"></span> Yega Market</small></footer>
+<div class="drawer" id="drawer"><aside class="panel">
+ <div class="panelhead"><h2>Söwda sebedi</h2><button class="close" id="closeCart">✕</button></div>
+ <div id="cartItems"></div><div class="total" id="total">Jemi: 0 TMT</div>
+ <form class="checkout" id="orderForm"><input id="customerName" placeholder="Adyň" required><input id="customerContact" placeholder="Telefon ýa-da e-poçta" required><textarea id="customerNote" placeholder="Goşmaça bellik (islege görä)" rows="3"></textarea><button type="submit">Sargyt maglumatyny taýýarla</button></form>
+ <div class="notice">Häzir töleg ulgamy birikdirilmedik. Bu düwme sargydyň maglumatyny görkezýär; hakyky sargyt kabul edilmeýär.</div>
+</aside></div>
+<script>
+const products=[
+{id:1,name:"Erkekler üçin gündelik köýnek",cat:"Geýim",price:180,emoji:"👔"},
+{id:2,name:"Sport aýakgaby",cat:"Geýim",price:320,emoji:"👟"},
+{id:3,name:"Akylly telefon",cat:"Elektronika",price:1450,emoji:"📱"},
+{id:4,name:"Bluetooth gulaklyk",cat:"Elektronika",price:220,emoji:"🎧"},
+{id:5,name:"Öý üçin stol çyrasy",cat:"Öý goşlary",price:95,emoji:"💡"},
+{id:6,name:"Derini ideg etmek toplumy",cat:"Gözellik",price:160,emoji:"🧴"},
+{id:7,name:"Sport topy",cat:"Sport",price:75,emoji:"⚽"},
+{id:8,name:"Erkekler üçin sagat",cat:"Aksessuarlary",price:260,emoji:"⌚"}
+];
+let cart=[];let activeCat="Hemmesi";let search="";
+const grid=document.getElementById("productGrid");
+function render(){
+ const shown=products.filter(p=>(activeCat==="Hemmesi"||p.cat===activeCat)&&p.name.toLowerCase().includes(search));
+ grid.innerHTML=shown.map(p=>`<article class="product"><div class="photo">${p.emoji}</div><div class="pbody"><span class="tag">${p.cat} · Nusga haryt</span><h3>${p.name}</h3><div class="price">${p.price.toLocaleString("tk-TM")} TMT</div><button class="add" onclick="addToCart(${p.id})">Sebede goş</button></div></article>`).join("")||"<p>Bu gözleg boýunça haryt tapylmady.</p>";
+}
+function addToCart(id){const p=products.find(x=>x.id===id);const old=cart.find(x=>x.id===id);old?old.qty++:cart.push({...p,qty:1});renderCart();}
+function removeItem(id){cart=cart.filter(x=>x.id!==id);renderCart();}
+function renderCart(){document.getElementById("cartCount").textContent=cart.reduce((a,x)=>a+x.qty,0);document.getElementById("cartItems").innerHTML=cart.length?cart.map(x=>`<div class="cartline"><span>${x.emoji} ${x.name}<br><small>${x.qty} × ${x.price} TMT</small></span><button onclick="removeItem(${x.id})">Aýyr</button></div>`).join(""):"<p>Sebet häzir boş.</p>";document.getElementById("total").textContent="Jemi: "+cart.reduce((a,x)=>a+x.price*x.qty,0).toLocaleString("tk-TM")+" TMT";}
+document.getElementById("openCart").onclick=()=>document.getElementById("drawer").classList.add("open");
+document.getElementById("closeCart").onclick=()=>document.getElementById("drawer").classList.remove("open");
+document.getElementById("drawer").onclick=e=>{if(e.target.id==="drawer")e.currentTarget.classList.remove("open")};
+document.querySelectorAll(".cat").forEach(b=>b.onclick=()=>{activeCat=b.dataset.cat;render();document.getElementById("products").scrollIntoView({behavior:"smooth"});});
+document.getElementById("searchForm").onsubmit=e=>{e.preventDefault();search=document.getElementById("searchInput").value.trim().toLowerCase();activeCat="Hemmesi";render();document.getElementById("products").scrollIntoView({behavior:"smooth"});};
+document.getElementById("orderForm").onsubmit=e=>{e.preventDefault();if(!cart.length){alert("Ilki sebede haryt goş.");return;}const lines=cart.map(x=>`${x.name} — ${x.qty} sany — ${x.price*x.qty} TMT`).join("\\n");alert("Sargyt maglumatynyň nusgasy:\\n"+document.getElementById("customerName").value+"\\n"+document.getElementById("customerContact").value+"\\n"+lines+"\\n"+document.getElementById("total").textContent+"\\n\\nBu diňe synag. Hakyky sargyt iberilmedi.");};
+document.getElementById("year").textContent=new Date().getFullYear();render();renderCart();
+</script>
+</body></html>
