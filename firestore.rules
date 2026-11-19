@@ -1,0 +1,64 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+
+    // !!! BU_YERE@gmail.com ýerine admin Gmail adresiňizi ýazyň (firebase-config.js bilen bir bolmaly)
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.email_verified == true
+        && request.auth.token.email == 'BU_YERE@gmail.com';
+    }
+
+    function validProduct(d) {
+      return d.name is string && d.name.size() > 0 && d.name.size() <= 100
+        && d.price is number && d.price >= 0
+        && d.cat is string
+        && (!('desc' in d) || (d.desc is string && d.desc.size() <= 1000))
+        && (!('img' in d) || (d.img is string && d.img.size() <= 500));
+    }
+
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.role in ['buyer', 'seller'];
+      allow update: if isAdmin();
+    }
+
+    match /products/{id} {
+      allow read: if resource.data.status == 'approved'
+        || (signedIn() && resource.data.ownerId == request.auth.uid)
+        || isAdmin();
+
+      allow create: if isAdmin()
+        || (signedIn()
+            && request.resource.data.ownerId == request.auth.uid
+            && request.resource.data.status == 'pending'
+            && validProduct(request.resource.data)
+            && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'seller');
+
+      allow update: if isAdmin()
+        || (signedIn()
+            && resource.data.ownerId == request.auth.uid
+            && request.resource.data.ownerId == request.auth.uid
+            && request.resource.data.status == 'pending'
+            && validProduct(request.resource.data));
+
+      allow delete: if isAdmin()
+        || (signedIn() && resource.data.ownerId == request.auth.uid);
+    }
+
+    match /orders/{id} {
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'new'
+        && request.resource.data.items is list
+        && request.resource.data.items.size() > 0
+        && request.resource.data.total is number;
+      allow read: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+      allow update: if isAdmin();
+      allow delete: if false;
+    }
+  }
+}

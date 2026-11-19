@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="tk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#6b5f55">
+<title>Yega Market — Admin</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:#fff;font:14px/1.45 Inter,system-ui,Arial,sans-serif;background:linear-gradient(125deg,#71665d,#b9a99a 50%,#655950) fixed}
+button,input,select,textarea{font:inherit;color:inherit}
+.g{background:rgba(72,66,61,.42);border:1px solid rgba(255,255,255,.42);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);box-shadow:0 15px 38px #241c1640,inset 0 1px #ffffff99;border-radius:22px}
+.wrap{width:min(1200px,94%);margin:0 auto;padding:18px 0 40px}
+.top{display:flex;align-items:center;gap:12px;padding:12px 16px;margin-bottom:14px}
+.mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-weight:900;background:linear-gradient(145deg,#e2d6c9,#76675c)}
+.top b{flex:1}
+.btn{border:0;cursor:pointer;border-radius:14px;padding:10px 16px;background:linear-gradient(130deg,#c58e5d,#875b3a)}
+.gb{border:1px solid #fff8;background:#ffffff30;border-radius:12px;padding:8px 12px;cursor:pointer}
+.tabs{display:flex;gap:6px;padding:6px;margin-bottom:14px;width:max-content;max-width:100%;overflow:auto;border-radius:30px}
+.tabs button{border:0;background:transparent;padding:9px 18px;border-radius:25px;cursor:pointer}
+.tabs button.on{background:#ffffffcc;color:#38312b}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.stat{padding:16px}.stat small{color:#e0d7cf}.stat div{font-size:26px;font-weight:750}
+.card{padding:16px;margin-bottom:14px;overflow:auto}
+.card h2{font:600 19px Georgia,serif;margin:0 0 12px}
+.field{width:100%;padding:11px;border:1px solid #fff8;background:#ffffff30;border-radius:12px;margin:4px 0;outline:0}
+.field::placeholder{color:#eee6df}
+select.field option{color:#222}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+table{width:100%;border-collapse:collapse;min-width:560px}
+td,th{padding:9px 6px;border-bottom:1px solid #fff3;text-align:left;vertical-align:top}
+th{color:#e0d7cf;font-weight:500;font-size:12px}
+.tag{font-size:11px;padding:4px 9px;border-radius:20px;background:#ffffff30;white-space:nowrap}
+.tag.approved,.tag.done{background:#4f8a5f99}.tag.rejected,.tag.cancelled{background:#8a3a3a99}
+.sub{color:#e0d7cf;font-size:12px}
+.msg{padding:10px 12px;border-radius:12px;background:#ffffff26;margin:8px 0}
+.msg.err{background:#8a3a3a99}
+.hide{display:none}
+@media(max-width:680px){.stats{grid-template-columns:1fr 1fr}.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top g"><span class="mark">|Y|</span><b>Yega Market · Admin</b><a class="gb" href="./index.html">Saýt</a> <button class="gb hide" id="out">Çyk</button></div>
+
+  <div id="gate" class="card g">
+    <h2>Admin girişi</h2>
+    <p class="sub">Diňe admin Gmail adresi bilen girip bolýar.</p>
+    <button class="btn" id="login">Google bilen gir</button>
+    <div id="gmsg"></div>
+  </div>
+
+  <div id="app" class="hide">
+    <div class="stats">
+      <div class="stat g"><small>Tassyklanan harytlar</small><div id="sA">0</div></div>
+      <div class="stat g"><small>Garaşylýan harytlar</small><div id="sP">0</div></div>
+      <div class="stat g"><small>Sargytlar</small><div id="sO">0</div></div>
+      <div class="stat g"><small>Jemi sargyt (TMT)</small><div id="sR">0</div></div>
+    </div>
+    <div class="tabs g"><button class="on" data-tab="products">Harytlar</button><button data-tab="orders">Sargytlar</button><button data-tab="users">Ulanyjylar</button></div>
+
+    <section id="t-products">
+      <div class="card g"><h2 id="fTitle">Haryt goş</h2>
+        <form id="pf"><input type="hidden" id="pid">
+          <div class="row"><input class="field" id="pName" placeholder="Haryt ady" required maxlength="100"><input class="field" id="pPrice" type="number" min="0" step="any" placeholder="Baha (TMT)" required></div>
+          <div class="row"><select class="field" id="pCat"></select><input class="field" id="pImg" placeholder="Surat salgysy (https://...)" maxlength="500"></div>
+          <textarea class="field" id="pDesc" rows="2" placeholder="Beýany" maxlength="1000"></textarea>
+          <button class="btn">Ýatda sakla</button> <button type="button" class="gb" id="pReset">Arassala</button>
+        </form><div id="pMsg"></div>
+      </div>
+      <div class="card g"><h2>Ähli harytlar</h2>
+        <table><thead><tr><th>Haryt</th><th>Baha</th><th>Ýagdaý</th><th></th></tr></thead><tbody id="pt"></tbody></table>
+      </div>
+    </section>
+
+    <section id="t-orders" class="hide"><div class="card g"><h2>Sargytlar</h2>
+      <table><thead><tr><th>Sargyt</th><th>Alyjy</th><th>Jemi</th><th>Ýagdaý</th></tr></thead><tbody id="ot"></tbody></table></div></section>
+
+    <section id="t-users" class="hide"><div class="card g"><h2>Ulanyjylar</h2>
+      <table><thead><tr><th>E-poçta</th><th>Ady</th><th>Roly</th></tr></thead><tbody id="ut"></tbody></table></div></section>
+  </div>
+</div>
+
+<script type="module">
+import {auth,db,configured,ADMIN_EMAIL,CATEGORIES,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged,collection,doc,addDoc,updateDoc,deleteDoc,onSnapshot,serverTimestamp,esc,safeUrl} from "./fb.js";
+const $=id=>document.getElementById(id);
+const fmt=n=>Number(n).toLocaleString("en-US").replace(/,/g," ");
+const catLabel={clothes:"Geýim",electronics:"Elektronika",home:"Öý goşlary",beauty:"Gözellik",sport:"Sport",accessories:"Aksessuarlar"};
+const stP={pending:"garaşylýar",approved:"tassyklandy",rejected:"ret edildi"};
+const stO={new:"täze",confirmed:"tassyklandy",shipped:"ugradyldy",done:"tamamlandy",cancelled:"ýatyryldy"};
+$("pCat").innerHTML=CATEGORIES.map(c=>`<option value="${c.id}">${catLabel[c.id]}</option>`).join("");
+let products=[],unsubs=[],me=null;
+const gmsg=(t,e)=>$("gmsg").innerHTML=`<div class="msg ${e?"err":""}">${esc(t)}</div>`;
+
+if(!configured){gmsg("Firebase sazlanmady: firebase-config.js faýlyny dolduryň.",1);$("login").disabled=true}
+
+$("login").onclick=async()=>{try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(e){gmsg(e.code||e.message,1)}};
+$("out").onclick=()=>signOut(auth);
+
+if(configured)onAuthStateChanged(auth,u=>{
+  unsubs.forEach(f=>f());unsubs=[];me=u;
+  const ok=u&&u.emailVerified&&u.email===ADMIN_EMAIL;
+  $("gate").classList.toggle("hide",!!ok);$("app").classList.toggle("hide",!ok);$("out").classList.toggle("hide",!u);
+  if(u&&!ok){gmsg("Bu hasap admin däl: "+u.email,1);return}
+  if(ok)start();
+});
+
+function start(){
+  unsubs.push(onSnapshot(collection(db,"products"),s=>{products=s.docs.map(d=>({id:d.id,...d.data()}));drawP()},e=>gmsg(e.code,1)));
+  unsubs.push(onSnapshot(collection(db,"orders"),s=>{
+    const o=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));
+    $("sO").textContent=o.length;$("sR").textContent=fmt(o.filter(x=>x.status!=="cancelled").reduce((n,x)=>n+x.total,0));
+    $("ot").innerHTML=o.map(x=>`<tr><td>${esc(x.createdAt?.toDate?.().toLocaleString()||"")}<div class="sub">${x.items.map(i=>esc(i.name)+" × "+i.qty).join(", ")}</div></td><td>${esc(x.name)}<div class="sub">${esc(x.phone)}<br>${esc(x.address)}${x.note?"<br>"+esc(x.note):""}</div></td><td>${fmt(x.total)}</td><td><select class="field" data-o="${x.id}">${Object.entries(stO).map(([k,v])=>`<option value="${k}" ${x.status===k?"selected":""}>${v}</option>`).join("")}</select></td></tr>`).join("")||"<tr><td colspan=4 class=sub>Entek sargyt ýok</td></tr>";
+  },e=>gmsg(e.code,1)));
+  unsubs.push(onSnapshot(collection(db,"users"),s=>{
+    $("ut").innerHTML=s.docs.map(d=>d.data()).map(u=>`<tr><td>${esc(u.email)}</td><td>${esc(u.name)}</td><td>${esc(u.role)}</td></tr>`).join("");
+  },()=>{}));
+}
+
+function drawP(){
+  $("sA").textContent=products.filter(p=>p.status==="approved").length;
+  $("sP").textContent=products.filter(p=>p.status==="pending").length;
+  const order={pending:0,approved:1,rejected:2};
+  $("pt").innerHTML=[...products].sort((a,b)=>order[a.status]-order[b.status]).map(p=>`<tr><td>${esc(p.name)}<div class="sub">${esc(catLabel[p.cat]||p.cat)}</div></td><td>${fmt(p.price)}</td><td><span class="tag ${p.status}">${stP[p.status]||p.status}</span></td><td style="white-space:nowrap">
+  ${p.status!=="approved"?`<button class="gb" data-a="approve" data-id="${p.id}">✓</button>`:""}
+  ${p.status!=="rejected"?`<button class="gb" data-a="reject" data-id="${p.id}">✕</button>`:""}
+  <button class="gb" data-a="edit" data-id="${p.id}">✎</button> <button class="gb" data-a="del" data-id="${p.id}">🗑</button></td></tr>`).join("")||"<tr><td colspan=4 class=sub>Entek haryt ýok. Ýokardan goşuň.</td></tr>";
+}
+
+document.addEventListener("click",async e=>{
+  const tb=e.target.closest("[data-tab]");
+  if(tb){document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("on",x===tb));["products","orders","users"].forEach(k=>$("t-"+k).classList.toggle("hide",k!==tb.dataset.tab));return}
+  const b=e.target.closest("[data-a]");if(!b)return;
+  const id=b.dataset.id,a=b.dataset.a,p=products.find(x=>x.id===id);
+  try{
+    if(a==="approve")await updateDoc(doc(db,"products",id),{status:"approved"});
+    else if(a==="reject")await updateDoc(doc(db,"products",id),{status:"rejected"});
+    else if(a==="del"){if(confirm("Haryt pozulsynmy?"))await deleteDoc(doc(db,"products",id))}
+    else if(a==="edit"){$("pid").value=id;$("pName").value=p.name;$("pPrice").value=p.price;$("pCat").value=p.cat;$("pImg").value=p.img||"";$("pDesc").value=p.desc||"";$("fTitle").textContent="Haryt üýtget";scrollTo({top:0,behavior:"smooth"})}
+  }catch(x){alert(x.code||x.message)}
+});
+document.addEventListener("change",async e=>{
+  const s=e.target.closest("[data-o]");if(s)try{await updateDoc(doc(db,"orders",s.dataset.o),{status:s.value})}catch(x){alert(x.code||x.message)}
+});
+const reset=()=>{$("pf").reset();$("pid").value="";$("fTitle").textContent="Haryt goş"};
+$("pReset").onclick=reset;
+$("pf").onsubmit=async e=>{
+  e.preventDefault();
+  const d={name:$("pName").value.trim(),price:Number($("pPrice").value),cat:$("pCat").value,img:safeUrl($("pImg").value.trim()),desc:$("pDesc").value.trim()};
+  try{
+    if($("pid").value)await updateDoc(doc(db,"products",$("pid").value),d);
+    else await addDoc(collection(db,"products"),{...d,ownerId:me.uid,status:"approved",createdAt:serverTimestamp()});
+    reset();$("pMsg").innerHTML='<div class="msg">Ýatda saklandy.</div>';
+  }catch(x){$("pMsg").innerHTML=`<div class="msg err">${esc(x.code||x.message)}</div>`}
+};
+</script>
+</body>
+</html>
